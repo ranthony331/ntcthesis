@@ -1,0 +1,30 @@
+
+
+RASPI boot sequence
+https://www.sparkfun.com/news/2779
+
+rc.local -- NO GUI
+sudo nano /etc/rc.local
+/usr/bin/python3 /home/pi/blink.py &
+
+autostart
+
+LXDE - native raspi Desktop environment
+reference - https://stackoverflow.com/questions/45061983/python-tkinter-app-run-on-raspberry-pi-boot
+first checks for 
+
+and then inside the autostart file u simply write
+chmod +x my_program.py --> make your program executable
+#!/usr/bin/env python --> add shebang on your script
+---create autostart file
+nano /home/pi/.config/lxsession/LXDE-pi/autostart
+add this to autostart file
+@"/path to python script/
+take note of the beginning @
+--having this file exist the DE on raspi wont load(blank black screen)
+must delete if there is no use for it
+
+then it will check for
+
+mkdir /home/pi/.config/autostart
+nano /home/pi/.config/autostart/blink.dekstop
