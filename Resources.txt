@@ -28,3 +28,15 @@ then it will check for
 
 mkdir /home/pi/.config/autostart
 nano /home/pi/.config/autostart/blink.dekstop
+
+
+FOR TKINTER
+use .place for widgets
+use after loop
+make sure of display:0.0
+
+FOR GIT
+git commit -- first specify the files u want to add
+troubles with conflicting git remote and stuff
+git push -- comes after committing
+make sure u add files in the git commit for new files
