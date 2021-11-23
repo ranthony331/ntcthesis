@@ -56,18 +56,24 @@ def FwdButton():
         FWDlabel['text'] = "Cannot start\nOL Detected"
     elif Fwd_state == True:
         print("FWD RUNNING ALREADY")
-        INFOlabel['text'] = "WARNING:\nMotor already in Forward run"     
+        INFOlabel['text'] = "WARNING:\nMotor already in Forward run" 
+        FWDbutton['activebackground']="#4dff4d"     
     elif Rev_state == False:
         GPIO.output(GPIO21_Fwd, GPIO.HIGH)
+        REVbutton['activebackground']="gray" 
+        FWDbutton['activebackground']="#4dff4d" 
         Fwd_state = True
         FWDlabel['text'] = "FORWARD RUN"
         REVlabel['text'] = "LOCKED"
+        REVbutton['bg'] = "gray"
         print("\nFORWARD SW ON\n")
         INFOlabel['text'] = "COMMAND:\nForward button pressed"
         sleep(sleep_timer)
         GPIO.output(GPIO21_Fwd, GPIO.LOW)
         print("Fwd SW OFF\n\n\n")
     elif Rev_state == True:
+        FWDbutton['activebackground']="gray"    
+        REVbutton['bg'] = "#4dff4d"
         REVlabel['text'] = "REVERSE RUNNING"
         FWDlabel['text'] = "LOCKED"
         STOPlabel['text'] = "STOP MOTOR FIRST\nBEFORE CHANGING"
@@ -81,19 +87,27 @@ def RevButton():
     if OL_global == True:
         REVlabel['text'] = "Cannot start\nOL Detected"
     elif Rev_state == True:
-        print("REVERSE RUNNING ALREADY") 
+        print("REVERSE RUNNING ALREADY")
+        REVbutton['activebackground']="#4dff4d"
         INFOlabel['text'] = "WARNING:\nMotor already in Reverse run" 
     elif Fwd_state == False:
         GPIO.output(GPIO20_Rev, GPIO.HIGH)
+        FWDbutton['activebackground']="gray" 
+        REVbutton['activebackground']="#4dff4d"
         Rev_state = True
         print("\n\nREVERSE ON")
         INFOlabel['text'] = "COMMAND:\nReverse button pressed"
         sleep(sleep_timer)
         GPIO.output(GPIO20_Rev, GPIO.LOW)
         print("Rev relay OFF\n\n")
+        FWDbutton['bg'] = "gray"
+        REVbutton['bg'] = "#4dff4d"
         FWDlabel['text'] = "LOCKED"
         REVlabel['text'] = "REVERSE RUN"
     elif Fwd_state == True:
+        REVbutton['activebackground']="gray"
+        FWDbutton['bg'] = "#4dff4d"
+        REVbutton['bg'] = "#gray"
         FWDlabel['text'] = "FORWARD RUNNING"
         REVlabel['text'] = "LOCKED"
         STOPlabel['text'] = "STOP MOTOR FIRST\nBEFORE CHANGING"
@@ -114,6 +128,8 @@ def StopButton():
     master.after(2000, AfterTimerOff)
     #sleep(sleep_timer)
     #GPIO.output(GPIO26_Stop, GPIO.LOW)
+    FWDbutton['bg'] = "gray"
+    REVbutton['bg'] = "gray"
     FWDlabel['text'] = "MOTOR STOP"
     REVlabel['text'] = "MOTOR STOP"
     STOPlabel['text'] = "MOTOR STOP"
@@ -157,14 +173,14 @@ def OverLoadCheck():
         GPIO.output(GPIO26_Stop, GPIO.LOW) #turn off stop button after OL
     master.after(2000, OverLoadCheck)
 
-
+##   #4dff4d    light green #00b300
 ###OVERLOAD CHECK
 master.after(2000, OverLoadCheck)
 ###OVERLOAD CHECK
-FWDbutton = tk.Button(master, text="Forward",activebackground="#4dff4d", bg="#00b300", command=FwdButton, height="3", width="6",bd=6,  )
+FWDbutton = tk.Button(master, text="Forward", bg="gray", command=FwdButton, height="3", width="6",bd=6,  )
 FWDbutton.place(x=20, y=20)
 
-REVbutton = tk.Button(master, text="Reverse",activebackground="#4dff4d",bg="#00b300" , command=RevButton,height="3", width="6",bd =6,  )
+REVbutton = tk.Button(master, text="Reverse",bg="gray" , command=RevButton,height="3", width="6",bd =6,  )
 REVbutton.place(x=20, y=140)
 
 STOPbutton = tk.Button(master, text="STOP",activebackground="#ff1a1a", bg="#cc0000" , command=StopButton,height="3", width="6",bd =6,  )
