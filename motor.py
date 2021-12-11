@@ -165,7 +165,9 @@ def OverLoadCheck():
         GPIO.output(GPIO26_Stop, GPIO.HIGH)
         FWDlabel['text'] = "OVERLOAD STOP"
         REVlabel['text'] = "OVERLOAD STOP"
-        STOPlabel['text'] = "MOTOR STOP"        
+        STOPlabel['text'] = "MOTOR STOP"
+        FWDbutton['bg'] = "gray"
+        REVbutton['bg'] = "gray"        
     elif OL_global == False:
         OLbutton['bg']="gray"
         OLbutton['activebackground']="gray"
