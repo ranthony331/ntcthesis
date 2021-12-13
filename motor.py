@@ -29,10 +29,10 @@ GPIO.setup(GPIO26_Stop, GPIO.OUT)
 ##### CONNECT A SERIES RESISTOR FROM 3.3v to GPIO 5 FOR OVERLOAD
 GPIO.setup(GPIO5_OL, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 ##### CONNECT A SERIES RESISTOR FROM 3.3v to GPIO 5 FOR OVERLOAD
-#GPIO OUTPUTS TO LOW
-GPIO.output(GPIO21_Fwd, GPIO.LOW)
-GPIO.output(GPIO20_Rev, GPIO.LOW)
-GPIO.output(GPIO26_Stop, GPIO.LOW)
+#GPIO OUTPUTS TO HIGH because of logic low relay
+GPIO.output(GPIO21_Fwd, GPIO.HIGH)
+GPIO.output(GPIO20_Rev, GPIO.HIGH)
+GPIO.output(GPIO26_Stop, GPIO.HIGH)
 
 
 master = tk.Tk()
@@ -54,12 +54,14 @@ def FwdButton():
     global Fwd_state, Rev_state, FWDlabel, OL_global
     if OL_global == True:
         FWDlabel['text'] = "Cannot start\nOL Detected"
+        FWDbutton['bg'] = "gray"
+        REVbutton['bg'] = "gray"
     elif Fwd_state == True:
         print("FWD RUNNING ALREADY")
         INFOlabel['text'] = "WARNING:\nMotor already in Forward run" 
         FWDbutton['activebackground']="#4dff4d"     
     elif Rev_state == False:
-        GPIO.output(GPIO21_Fwd, GPIO.HIGH)
+        GPIO.output(GPIO21_Fwd, GPIO.LOW)
         REVbutton['activebackground']="gray" 
         FWDbutton['activebackground']="#4dff4d" 
         Fwd_state = True
@@ -69,7 +71,7 @@ def FwdButton():
         print("\nFORWARD SW ON\n")
         INFOlabel['text'] = "COMMAND:\nForward button pressed"
         sleep(sleep_timer)
-        GPIO.output(GPIO21_Fwd, GPIO.LOW)
+        GPIO.output(GPIO21_Fwd, GPIO.HIGH)
         print("Fwd SW OFF\n\n\n")
     elif Rev_state == True:
         FWDbutton['activebackground']="gray"    
@@ -86,19 +88,21 @@ def RevButton():
     global Fwd_state, Rev_state, REVlabel, OL_global
     if OL_global == True:
         REVlabel['text'] = "Cannot start\nOL Detected"
+        FWDbutton['bg'] = "gray"
+        REVbutton['bg'] = "gray"
     elif Rev_state == True:
         print("REVERSE RUNNING ALREADY")
         REVbutton['activebackground']="#4dff4d"
         INFOlabel['text'] = "WARNING:\nMotor already in Reverse run" 
     elif Fwd_state == False:
-        GPIO.output(GPIO20_Rev, GPIO.HIGH)
+        GPIO.output(GPIO20_Rev, GPIO.LOW)
         FWDbutton['activebackground']="gray" 
         REVbutton['activebackground']="#4dff4d"
         Rev_state = True
         print("\n\nREVERSE ON")
         INFOlabel['text'] = "COMMAND:\nReverse button pressed"
         sleep(sleep_timer)
-        GPIO.output(GPIO20_Rev, GPIO.LOW)
+        GPIO.output(GPIO20_Rev, GPIO.HIGH)
         print("Rev relay OFF\n\n")
         FWDbutton['bg'] = "gray"
         REVbutton['bg'] = "#4dff4d"
@@ -120,11 +124,11 @@ def StopButton():
     global Fwd_state, Rev_state
     Fwd_state = False
     Rev_state = False
-    GPIO.output(GPIO20_Rev, GPIO.LOW)
-    GPIO.output(GPIO21_Fwd, GPIO.LOW)
+    GPIO.output(GPIO20_Rev, GPIO.HIGH)
+    GPIO.output(GPIO21_Fwd, GPIO.HIGH)
     ### STOP RELAY WILL BE NC, SIGNAL WILL SWITCH TO NO
     print("\n\nSTOP press")
-    GPIO.output(GPIO26_Stop, GPIO.HIGH)
+    GPIO.output(GPIO26_Stop, GPIO.LOW)
     master.after(2000, AfterTimerOff)
     #sleep(sleep_timer)
     #GPIO.output(GPIO26_Stop, GPIO.LOW)
@@ -137,7 +141,7 @@ def StopButton():
     print("STOPPED")
 
 def AfterTimerOff():
-    GPIO.output(GPIO26_Stop, GPIO.LOW)
+    GPIO.output(GPIO26_Stop, GPIO.HIGH)
     print("Stop depress\n\n")
     
     
@@ -160,9 +164,9 @@ def OverLoadCheck():
         INFOlabel['text'] = "CRITICAL: OVERLOAD DETECTED"
         Fwd_state = False
         Rev_state = False
-        GPIO.output(GPIO20_Rev, GPIO.LOW)
-        GPIO.output(GPIO21_Fwd, GPIO.LOW)
-        GPIO.output(GPIO26_Stop, GPIO.HIGH)
+        GPIO.output(GPIO20_Rev, GPIO.HIGH)
+        GPIO.output(GPIO21_Fwd, GPIO.HIGH)
+        GPIO.output(GPIO26_Stop, GPIO.LOW)
         FWDlabel['text'] = "OVERLOAD STOP"
         REVlabel['text'] = "OVERLOAD STOP"
         STOPlabel['text'] = "MOTOR STOP"
@@ -172,7 +176,7 @@ def OverLoadCheck():
         OLbutton['bg']="gray"
         OLbutton['activebackground']="gray"
         OLbutton['text']="OVER\nLOAD" 
-        GPIO.output(GPIO26_Stop, GPIO.LOW) #turn off stop button after OL
+        GPIO.output(GPIO26_Stop, GPIO.HIGH) #turn off stop button after OL
     master.after(2000, OverLoadCheck)
 
 ##   #4dff4d    light green #00b300
